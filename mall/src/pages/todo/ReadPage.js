@@ -1,9 +1,11 @@
+import { useCallback } from "react";
 import {
   useParams,
   useNavigate,
   createSearchParams,
   useSearchParams,
 } from "react-router-dom";
+import ReadComponent from "../../components/todo/ReadComponent";
 
 const ReadPage = () => {
   const navigate = useNavigate();
@@ -16,33 +18,21 @@ const ReadPage = () => {
 
   const queryStr = createSearchParams({ page: page, size: size }).toString();
 
-  const moveToModify = (tno) => {
-    navigate({ pathname: `/todo/modify/${tno}`, search: queryStr });
-  };
+  const moveToModify = useCallback(
+    (tno) => {
+      navigate({ pathname: `/todo/modify/${tno}`, search: queryStr });
+    },
+    [tno, page, size]
+  );
 
-  const moveToList = () => {
-    navigate({ pathname: `/todo/list/`, search: queryStr });
-  };
+  const moveToList = useCallback(() => {
+    navigate({ pathname: `/todo/list`, search: queryStr });
+  }, [page, size]);
 
   return (
-    <div className="text-3xl">
-      리드 페이지 {tno}
-      <div>
-        <button
-          onClick={() => {
-            moveToModify(tno);
-          }}
-        >
-          Test Modify
-        </button>
-        <button
-          onClick={() => {
-            moveToList();
-          }}
-        >
-          Test List
-        </button>
-      </div>
+    <div className="font-extrabold w-full bg-white mt-6">
+      <div className="text-2xl "> Todo Read Page Component {tno} </div>
+      <ReadComponent tno={tno}></ReadComponent>
     </div>
   );
 };
